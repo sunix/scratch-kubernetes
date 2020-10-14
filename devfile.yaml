@@ -1,0 +1,155 @@
+apiVersion: 1.0.0
+metadata:
+  generateName: scratch-k8s-
+
+projects:
+
+  - name: scratch-gui
+    source:
+      location: 'https://github.com/sunix/scratch-gui'
+      type: git
+
+  - name: scratch-vm
+    source:
+      location: 'https://github.com/sunix/scratch-vm'
+      type: git
+
+  - name: quarkus-kubernetes-client-service
+    source:
+      location: 'https://github.com/sunix/quarkus-kubernetes-client-service.git'
+      type: git
+
+components:
+
+  - type: chePlugin
+    id: che-incubator/typescript/latest
+    memoryLimit: 512Mi
+
+  - type: dockerimage
+    alias: scratch-nodejs
+    image: 'quay.io/eclipse/che-nodejs12-community:nightly'
+    memoryLimit: 1500Mi
+    endpoints:
+      - name: scratch
+        port: 8601
+    mountSources: true
+    env:
+      - name: HOME
+        value: /projects
+
+  - type: dockerimage
+    alias: git
+    args:
+      - sleep
+      - infinity
+    memoryLimit: 64M
+    image: sunix/git-devtools
+    mountSources: true
+
+
+  - id: redhat/quarkus-java11/latest
+    type: chePlugin
+
+  - mountSources: true
+    endpoints:
+      - attributes:
+          path: /k8s
+        name: k8s
+        port: 8080
+    memoryLimit: 4927M
+    type: dockerimage
+    volumes:
+      - name: m2
+        containerPath: /home/user/.m2
+      - name: kube
+        containerPath: /home/user/.kube
+    alias: quarkus-k8s-service
+    image: 'quay.io/eclipse/che-quarkus:nightly'
+    env:
+      - value: '-XX:MaxRAMPercentage=50.0 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xms20m -Djava.security.egd=file:/dev/./urandom -Duser.home=/home/user'
+        name: JAVA_OPTS
+      - value: $(JAVA_OPTS)
+        name: MAVEN_OPTS
+
+  - mountSources: true
+    endpoints:
+      - attributes:
+          path: /k8s
+        name: k8s-minimal
+        port: 8080
+    command:
+      - tail
+    args:
+      - '-f'
+      - /dev/null
+    memoryLimit: 32M
+    type: dockerimage
+    volumes:
+      - name: kube
+        containerPath: /home/user/.kube
+    alias: quarkus-k8s-service-minimal
+    image: registry.access.redhat.com/ubi8/ubi-minimal
+
+  - id: redhat/vscode-openshift-connector/latest
+    type: chePlugin
+
+commands:
+
+  - name: 1. Install all required dependencies
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}'
+        type: exec
+        command: cd scratch-vm && yarn install && yarn link && cd ../scratch-gui && yarn link scratch-vm && yarn install
+        component: scratch-nodejs
+
+  - name: 2. Start Scratch-gui in Devmode
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/scratch-gui'
+        type: exec
+        command: yarn start
+        component: scratch-nodejs
+
+  - name: Package
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/quarkus-kubernetes-client-service'
+        type: exec
+        command: ./mvnw package
+        component: quarkus-k8s-service
+
+  - name: 3. Start Development mode (Hot reload + debug)
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/quarkus-kubernetes-client-service'
+        type: exec
+        command: 'curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output /tmp/jq ; chmod +x /tmp/jq ; export SCRATCH_URL=$(sed -e ''s/^"//'' -e ''s/"$//'' <<<$(curl $CHE_API_INTERNAL''/workspace/''${CHE_WORKSPACE_ID} -H ''Connection: keep-alive''  -H ''Accept: application/json, text/plain, */*'' -H ''Authorization: Bearer ''$CHE_MACHINE_TOKEN | /tmp/jq ''.runtime.machines | .[].servers |  select(.scratch) | .scratch.url'')); export K8S_URL=$(sed -e ''s/^"//'' -e ''s/"$//'' <<<$(curl $CHE_API_INTERNAL''/workspace/''${CHE_WORKSPACE_ID} -H ''Connection: keep-alive''  -H ''Accept: application/json, text/plain, */*'' -H ''Authorization: Bearer ''$CHE_MACHINE_TOKEN | /tmp/jq ''.runtime.machines | .[].servers |  select(.k8s) | .k8s.url'')); echo $SCRATCH_URL; echo $K8S_URL;  ./mvnw compile quarkus:dev'
+        component: quarkus-k8s-service
+
+  - name: Package Native
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/quarkus-kubernetes-client-service'
+        type: exec
+        command: ./mvnw package -Dnative -Dmaven.test.skip
+        component: quarkus-k8s-service
+
+  - name: Start Native
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/quarkus-kubernetes-client-service/target'
+        type: exec
+        command: ./getting-started-1.0-SNAPSHOT-runner
+        component: quarkus-k8s-service-minimal
+
+  - name: Attach remote debugger
+    actions:
+      - referenceContent: |
+          {
+            "version": "0.2.0",
+            "configurations": [
+              {
+                "type": "java",
+                "request": "attach",
+                "name": "Attach to Remote Quarkus App",
+                "hostName": "localhost",
+                "port": 5005
+              }
+            ]
+          }
+        type: vscode-launch
