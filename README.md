@@ -1,4 +1,14 @@
-# quarkus-kubernetes-client-service project
+# Scratch Kubernetes
+
+This is a draft project implementing Scratch blocks to interact with Kubernetes.
+
+This project is composed of:
+- `quarkus-kubernetes-client-service` located in this repo: a simple REST application that exposes kubernetes actions to scratch.
+- `scratch-vm` a fork of the original scratch-vm + the scratch k8s library with the implementation of the k8s custom blocks.
+- `scratch-gui` a fork of the original scratch-gui + the declaration of the scratch k8s library.
+
+
+
 
 Run that with che:
 ```
