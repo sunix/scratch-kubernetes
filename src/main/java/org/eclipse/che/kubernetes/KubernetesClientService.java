@@ -19,12 +19,6 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 @Path("/k8s")
 public class KubernetesClientService {
 
-    @ConfigProperty(name = "CHE_WORKSPACE_ID")
-    String workspaceId;
-
-    @ConfigProperty(name = "CHE_MACHINE_TOKEN")
-    String machineToken;
-
     @ConfigProperty(name = "K8S_URL")
     String k8sRoute;
 
