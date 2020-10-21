@@ -16,7 +16,7 @@ projects:
 
   - name: quarkus-kubernetes-client-service
     source:
-      location: 'https://github.com/sunix/quarkus-kubernetes-client-service.git'
+      location: 'https://github.com/sunix/scratch-kubernetes'
       type: git
 
 components:
