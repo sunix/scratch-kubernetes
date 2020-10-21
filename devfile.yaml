@@ -93,6 +93,15 @@ components:
   - id: redhat/vscode-openshift-connector/latest
     type: chePlugin
 
+  - alias: didact
+    type: chePlugin
+    reference: 'https://gist.githubusercontent.com/sunix/9aefb178a7984aa670cb59b3557495f4/raw/8221e5298d4364ed4ca75539ac20c3fea5365399/meta.yaml'
+    preferences:
+      didact.openDefaultTutorialAtStartup: true
+      che.welcome.enable: false
+      didact.defaultUrl: /projects/quarkus-kubernetes-client-service/scratch-k8s-che.didact.md
+
+
 commands:
 
   - name: 1. Install all required dependencies
