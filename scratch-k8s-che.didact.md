@@ -1,5 +1,7 @@
 # Scratch blocks to interact with Kubernetes
 Welcome to this demo to add new blocks to Scratch to interact with your Kubernetes cluster.
+![Eclipse Che - Scratch - Kubernetes](https://raw.githubusercontent.com/sunix/scratch-kubernetes/master/images/scratch-k8s-che-diag.svg)
+
 
 ## Before you start
 Make sure that you are connected into a valid Kubernetes cluster
