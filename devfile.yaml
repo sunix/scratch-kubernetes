@@ -95,7 +95,7 @@ components:
 
   - alias: didact
     type: chePlugin
-    reference: 'https://gist.githubusercontent.com/sunix/9aefb178a7984aa670cb59b3557495f4/raw/8221e5298d4364ed4ca75539ac20c3fea5365399/meta.yaml'
+    reference: 'https://raw.githubusercontent.com/eclipse/che-plugin-registry/master/v3/plugins/redhat/vscode-didact/0.1.17/meta.yaml'
     preferences:
       didact.openDefaultTutorialAtStartup: true
       che.welcome.enable: false
