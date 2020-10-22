@@ -12,7 +12,7 @@ This project is composed of:
 
 Run that with che:
 ```
-https://<che-host>/factory?url=https://github.com/sunix/quarkus-kubernetes-client-service
+https://<che-host>/factory?url=https://github.com/sunix/scratch-kubernetes
 ```
 Fork this repo and replace blog.sunix.org with your che host:
-<a href="https://blog.sunix.org/factory?url=https://github.com/sunix/quarkus-kubernetes-client-service"><img src="https://www.eclipse.org/che/contribute.svg" /></a>
+<a href="https://blog.sunix.org/factory?url=https://github.com/sunix/scratch-kubernetes"><img src="https://www.eclipse.org/che/contribute.svg" /></a>
