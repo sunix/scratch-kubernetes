@@ -48,7 +48,8 @@ components:
 
 
   - id: redhat/quarkus-java11/latest
-    type: chePlugin
+    type: che
+    
 
   - mountSources: true
     endpoints:
@@ -100,7 +101,7 @@ components:
       didact.openDefaultTutorialAtStartup: true
       che.welcome.enable: false
       didact.defaultUrl: /projects/quarkus-kubernetes-client-service/scratch-k8s-che.didact.md
-
+    registryUrl: 'https://che-plugin-registry-main.surge.sh/v3'
 
 commands:
 
