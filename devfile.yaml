@@ -48,8 +48,7 @@ components:
 
 
   - id: redhat/quarkus-java11/latest
-    type: che
-    
+    type: chePlugin
 
   - mountSources: true
     endpoints:
