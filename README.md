@@ -14,5 +14,5 @@ Run that with che:
 ```
 https://<che-host>/factory?url=https://github.com/sunix/scratch-kubernetes
 ```
-Fork this repo and replace blog.sunix.org with your che host:
-<a href="https://blog.sunix.org/factory?url=https://github.com/sunix/scratch-kubernetes"><img src="https://www.eclipse.org/che/contribute.svg" /></a>
+Fork this repo and replace `https://codeready-codeready-workspaces-operator.apps.sandbox.x8i5.p1.openshiftapps.com/` with your che host:
+<a href="https://codeready-codeready-workspaces-operator.apps.sandbox.x8i5.p1.openshiftapps.com/factory?url=https://github.com/sunix/scratch-kubernetes"><img src="https://www.eclipse.org/che/contribute.svg" /></a>
