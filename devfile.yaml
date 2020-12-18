@@ -1,53 +1,54 @@
 apiVersion: 1.0.0
 metadata:
   generateName: scratch-k8s-
-
 projects:
 
   - name: scratch-gui
     source:
       location: 'https://github.com/sunix/scratch-gui'
       type: git
+      branch: develop
 
   - name: scratch-vm
     source:
       location: 'https://github.com/sunix/scratch-vm'
       type: git
+      branch: develop
 
   - name: quarkus-kubernetes-client-service
     source:
       location: 'https://github.com/sunix/scratch-kubernetes'
       type: git
+      branch: master
 
 components:
 
-  - type: chePlugin
-    id: che-incubator/typescript/latest
-    memoryLimit: 512Mi
 
-  - type: dockerimage
-    alias: scratch-nodejs
-    image: 'quay.io/eclipse/che-nodejs12-community:nightly'
-    memoryLimit: 1500Mi
+  - id: che-incubator/typescript/latest
+    memoryLimit: 0.4Gi
+    type: chePlugin
+
+
+  - mountSources: true
     endpoints:
       - name: scratch
         port: 8601
-    mountSources: true
+    memoryLimit: 0.7Gi
+    type: dockerimage
+    image: 'quay.io/eclipse/che-nodejs12-community:nightly'
+    alias: scratch-nodejs
     env:
-      - name: HOME
-        value: /projects
-
-  - type: dockerimage
-    alias: git
-    args:
-      - sleep
-      - infinity
+      - value: /projects
+        name: HOME
+  
+  - mountSources: true
     memoryLimit: 64M
-    image: sunix/git-devtools
-    mountSources: true
-
+    type: dockerimage
+    image: quay.io/sunix/git-devtools
+    alias: git
 
   - id: redhat/quarkus-java11/latest
+    memoryLimit: 1.5Gi
     type: chePlugin
 
   - mountSources: true
@@ -56,7 +57,7 @@ components:
           path: /k8s
         name: k8s
         port: 8080
-    memoryLimit: 4927M
+    memoryLimit: 2Gi
     type: dockerimage
     volumes:
       - name: m2
@@ -82,7 +83,7 @@ components:
     args:
       - '-f'
       - /dev/null
-    memoryLimit: 32M
+    memoryLimit: 0.03Gi
     type: dockerimage
     volumes:
       - name: kube
@@ -91,16 +92,18 @@ components:
     image: registry.access.redhat.com/ubi8/ubi-minimal
 
   - id: redhat/vscode-openshift-connector/latest
+    memoryLimit: 0.7Gi
     type: chePlugin
 
-  - alias: didact
-    type: chePlugin
-    id: redhat/vscode-didact/latest
+  - id: redhat/vscode-didact/latest
     preferences:
       didact.openDefaultTutorialAtStartup: true
       che.welcome.enable: false
       didact.defaultUrl: /projects/quarkus-kubernetes-client-service/scratch-k8s-che.didact.md
+    type: chePlugin
     registryUrl: 'https://che-plugin-registry-main.surge.sh/v3'
+    alias: didact
+
 
 commands:
 
