@@ -92,7 +92,6 @@ components:
     image: registry.access.redhat.com/ubi8/ubi-minimal
 
   - id: redhat/vscode-openshift-connector/latest
-    memoryLimit: 0.7Gi
     type: chePlugin
 
   - id: redhat/vscode-didact/latest
