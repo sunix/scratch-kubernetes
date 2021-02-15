@@ -33,7 +33,7 @@ components:
     endpoints:
       - name: scratch
         port: 8601
-    memoryLimit: 0.7Gi
+    memoryLimit: 1Gi
     type: dockerimage
     image: 'quay.io/eclipse/che-nodejs12-community:nightly'
     alias: scratch-nodejs
@@ -48,7 +48,7 @@ components:
     alias: git
 
   - id: redhat/quarkus-java11/latest
-    memoryLimit: 1.5Gi
+    memoryLimit: 1.8Gi
     type: chePlugin
 
   - mountSources: true
@@ -57,7 +57,7 @@ components:
           path: /k8s
         name: k8s
         port: 8080
-    memoryLimit: 2Gi
+    memoryLimit: 1Gi
     type: dockerimage
     volumes:
       - name: m2
