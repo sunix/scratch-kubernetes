@@ -29,3 +29,5 @@ You should see Scratch running. By the default, the K8S blocks are not available
 ## Add your own Kubernetes blocks
 - [Open KubernetesClientService.java](didact://?commandId=vscode.open&projectFilePath=quarkus-kubernetes-client-service%2Fsrc%2Fmain%2Fjava%2Forg%2Feclipse%2Fche%2Fkubernetes%2FKubernetesClientService.java&number=2) to code the Quarkus RestAPI that will interact with Kubernetes
 - [Open scratch-vm / extensions / scratch3_k8s / index.js](didact://?commandId=vscode.open&projectFilePath=scratch-vm%2Fsrc%2Fextensions%2Fscratch3_k8s%2Findex.js&number=2) to customize or add new blocks
+
+That's it
