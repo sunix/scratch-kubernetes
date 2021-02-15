@@ -72,25 +72,6 @@ components:
       - value: $(JAVA_OPTS)
         name: MAVEN_OPTS
 
-  - mountSources: true
-    endpoints:
-      - attributes:
-          path: /k8s
-        name: k8s-minimal
-        port: 8080
-    command:
-      - tail
-    args:
-      - '-f'
-      - /dev/null
-    memoryLimit: 0.03Gi
-    type: dockerimage
-    volumes:
-      - name: kube
-        containerPath: /home/user/.kube
-    alias: quarkus-k8s-service-minimal
-    image: registry.access.redhat.com/ubi8/ubi-minimal
-
   - id: redhat/vscode-openshift-connector/latest
     type: chePlugin
 
@@ -133,20 +114,6 @@ commands:
         type: exec
         command: 'curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output /tmp/jq ; chmod +x /tmp/jq ; export SCRATCH_URL=$(sed -e ''s/^"//'' -e ''s/"$//'' <<<$(curl $CHE_API_INTERNAL''/workspace/''${CHE_WORKSPACE_ID} -H ''Connection: keep-alive''  -H ''Accept: application/json, text/plain, */*'' -H ''Authorization: Bearer ''$CHE_MACHINE_TOKEN | /tmp/jq ''.runtime.machines | .[].servers |  select(.scratch) | .scratch.url'')); export K8S_URL=$(sed -e ''s/^"//'' -e ''s/"$//'' <<<$(curl $CHE_API_INTERNAL''/workspace/''${CHE_WORKSPACE_ID} -H ''Connection: keep-alive''  -H ''Accept: application/json, text/plain, */*'' -H ''Authorization: Bearer ''$CHE_MACHINE_TOKEN | /tmp/jq ''.runtime.machines | .[].servers |  select(.k8s) | .k8s.url'')); echo $SCRATCH_URL; echo $K8S_URL;  ./mvnw compile quarkus:dev'
         component: quarkus-k8s-service
-
-  - name: Package Native
-    actions:
-      - workdir: '${CHE_PROJECTS_ROOT}/quarkus-kubernetes-client-service'
-        type: exec
-        command: ./mvnw package -Dnative -Dmaven.test.skip
-        component: quarkus-k8s-service
-
-  - name: Start Native
-    actions:
-      - workdir: '${CHE_PROJECTS_ROOT}/quarkus-kubernetes-client-service/target'
-        type: exec
-        command: ./getting-started-1.0-SNAPSHOT-runner
-        component: quarkus-k8s-service-minimal
 
   - name: Attach remote debugger
     actions:
