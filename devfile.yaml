@@ -74,6 +74,7 @@ components:
 
   - id: redhat/vscode-openshift-connector/latest
     type: chePlugin
+    registryUrl: 'https://sunix-plugin-registry-openshift-con-fh0ka.surge.sh/v3'
 
   - id: redhat/vscode-didact/latest
     preferences:
