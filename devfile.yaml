@@ -80,7 +80,7 @@ components:
     preferences:
       didact.openDefaultTutorialAtStartup: true
       che.welcome.enable: false
-      didact.defaultUrl: /projects/quarkus-kubernetes-client-service/scratch-k8s-che.didact.md
+      didact.defaultUrl: https://github.com/sunix/scratch-kubernetes/raw/master/scratch-k8s-che.didact.md
     type: chePlugin
     registryUrl: 'https://che-plugin-registry-main.surge.sh/v3'
     alias: didact
