@@ -48,7 +48,7 @@ components:
     alias: git
 
   - id: redhat/quarkus-java11/latest
-    memoryLimit: 1.8Gi
+    memoryLimit: 1.9Gi
     type: chePlugin
 
   - mountSources: true
